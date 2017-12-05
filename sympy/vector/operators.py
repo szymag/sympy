@@ -119,6 +119,32 @@ class Curl(Expr):
         return curl(self._expr, doit=True)
 
 
+class Laplacian(Expr):
+    """
+    Represents unevaluated Curl.
+
+    Examples
+    ========
+
+    >>> from sympy.vector import CoordSys3D, Laplacian
+    >>> R = CoordSys3D('R')
+    >>> v = R.y*R.z*R.i + R.x*R.z*R.j + R.x*R.y*R.k
+    >>> Laplacian(v)
+    Laplacian(R.y*R.z*R.i + R.x*R.z*R.j + R.x*R.y*R.k)
+
+    """
+
+    def __new__(cls, expr):
+        expr = sympify(expr)
+        obj = Expr.__new__(cls, expr)
+        obj._expr = expr
+        return obj
+
+    def doit(self, **kwargs):
+        from sympy.vector.functions import laplacian
+        return laplacian(self._expr)
+
+
 def curl(vect, coord_sys=None, doit=True):
     """
     Returns the curl of a vector field computed wrt the base scalars
